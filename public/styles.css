@@ -12,6 +12,8 @@
   --accent-ink:  #ffffff;
   --good:        #006300;
   --bad:         #d03b3b;
+  --good-bg:     rgba(0,99,0,0.08);
+  --bad-bg:      rgba(208,59,59,0.08);
   --warn-bg:     #fdf3e0;
   --warn-border: #eda100;
 }
@@ -31,6 +33,8 @@
     --accent-ink:  #ffffff;
     --good:        #0ca30c;
     --bad:         #e66767;
+    --good-bg:     rgba(12,163,12,0.14);
+    --bad-bg:      rgba(230,103,103,0.14);
     --warn-bg:     #2a2410;
     --warn-border: #c98500;
   }
@@ -49,6 +53,8 @@
   --accent-ink:  #ffffff;
   --good:        #0ca30c;
   --bad:         #e66767;
+  --good-bg:     rgba(12,163,12,0.14);
+  --bad-bg:      rgba(230,103,103,0.14);
   --warn-bg:     #2a2410;
   --warn-border: #c98500;
 }
@@ -212,6 +218,7 @@ td.col-num { text-align: right; }
 .cand-urna { font-weight: 600; }
 .cand-nome { color: var(--text-secondary); font-size: 12px; margin-top: 2px; }
 .cand-nr { color: var(--text-muted); font-size: 12px; }
+.cand-meta-mobile { display: none; }
 
 .badge {
   display: inline-block;
@@ -265,4 +272,76 @@ td.col-num { text-align: right; }
 @media (max-width: 760px) {
   .stats { grid-template-columns: repeat(2, 1fr); }
   .topbar-inner { flex-direction: column; align-items: flex-start; }
+}
+
+/* ---------- Cards no mobile (em vez de tabela com scroll lateral) ---------- */
+@media (max-width: 700px) {
+  .filters { flex-direction: column; align-items: stretch; }
+  .filters .input, .filters .btn-ghost { width: 100%; }
+
+  .table-scroll { overflow-x: visible; }
+  table { min-width: 0; }
+
+  thead { display: none; }
+  tbody { display: block; }
+
+  tbody tr {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    border-bottom: 10px solid var(--page);
+  }
+  tbody tr:last-child { border-bottom: none; }
+
+  tbody td {
+    display: block;
+    padding: 0;
+    border: none;
+    text-align: left;
+  }
+  td.col-num { text-align: left; }
+
+  /* Esconde as colunas que viram texto compacto dentro do card do candidato */
+  td.col-rank, td.col-cargo, td.col-uf, td.col-partido { display: none; }
+  .cand-meta-mobile { display: block; font-size: 12.5px; color: var(--text-secondary); margin-top: 4px; }
+
+  /* Ordem no card: nome > variação (o destaque) > patrimônio 2026 > patrimônio 2022 */
+  td.col-cand { order: 1; }
+  td.col-variacao { order: 2; }
+  td.col-pat2026 { order: 3; }
+  td.col-pat2022 { order: 4; }
+
+  td.col-pat2026, td.col-pat2022 {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 14px;
+    padding-top: 4px;
+    border-top: 1px solid var(--grid);
+  }
+  td.col-pat2026::before, td.col-pat2022::before {
+    content: attr(data-label);
+    color: var(--text-secondary);
+    font-size: 12.5px;
+    font-weight: 500;
+    font-variant-numeric: normal;
+  }
+
+  td.col-variacao { padding: 2px 0; }
+  .delta-up, .delta-down, .delta-new {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 15px;
+  }
+  .delta-up { background: var(--good-bg); }
+  .delta-down { background: var(--bad-bg); }
+  .delta-new { background: var(--surface-2); border: 1px dashed var(--border); justify-content: center; }
+  .delta-sub { display: inline-block; margin-left: 8px; }
+
+  .pagination { flex-wrap: wrap; }
 }

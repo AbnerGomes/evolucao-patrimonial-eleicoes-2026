@@ -72,6 +72,7 @@
     els.uf = $("fUf");
     els.partido = $("fPartido");
     els.variacao = $("fVariacao");
+    els.sort = $("fSort");
     els.reset = $("fReset");
     els.tbody = $("tbody");
     els.pPrev = $("pPrev");
@@ -147,15 +148,21 @@
     document.querySelectorAll("th[data-sort]").forEach(function (th) {
       th.addEventListener("click", function () {
         var key = th.getAttribute("data-sort");
+        var dir;
         if (state.sortKey === key) {
-          state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+          dir = state.sortDir === "asc" ? "desc" : "asc";
         } else {
-          state.sortKey = key;
-          state.sortDir = key === "urna" || key === "cargo" || key === "uf" || key === "partido" ? "asc" : "desc";
+          dir = key === "urna" || key === "cargo" || key === "uf" || key === "partido" ? "asc" : "desc";
         }
-        state.page = 1;
-        applyFilters();
+        setSort(key, dir);
       });
+    });
+
+    // Seletor "Ordenar por" — cobre o mobile, onde o cabeçalho da tabela
+    // (clicável) fica escondido para virar cards em vez de tabela com scroll.
+    els.sort.addEventListener("change", function () {
+      var parts = els.sort.value.split(":");
+      setSort(parts[0], parts[1]);
     });
 
     var themeBtn = $("themeToggle");
@@ -183,6 +190,20 @@
     };
   }
 
+  function setSort(key, dir) {
+    state.sortKey = key;
+    state.sortDir = dir;
+    state.page = 1;
+    applyFilters();
+  }
+
+  function syncSortSelect() {
+    var value = state.sortKey + ":" + state.sortDir;
+    if (els.sort.querySelector('option[value="' + value + '"]')) {
+      els.sort.value = value;
+    }
+  }
+
   function changePage(delta) {
     var maxPage = Math.max(1, Math.ceil(state.filtered.length / PAGE_SIZE));
     state.page = Math.min(maxPage, Math.max(1, state.page + delta));
@@ -202,6 +223,7 @@
       return true;
     });
     sortFiltered();
+    syncSortSelect();
     renderStats();
     renderTable();
   }
@@ -290,13 +312,14 @@
       '<td class="col-rank">' + rank + "</td>" +
       '<td class="col-cand"><div class="cand-urna">' + escapeHtml(c.urna) + "</div>" +
       '<div class="cand-nome">' + escapeHtml(c.nome) + "</div>" +
-      '<div class="cand-nr">Nº ' + escapeHtml(c.nr) + " · " + escapeHtml(c.genero) + "</div></td>" +
-      "<td>" + escapeHtml(c.cargo) + "</td>" +
-      "<td>" + escapeHtml(c.uf) + "</td>" +
-      '<td title="' + escapeHtml(c.partidoNome) + '">' + escapeHtml(c.partido) + "</td>" +
-      '<td class="col-num" title="' + brl2.format(c.pat2026) + '">' + brl0.format(c.pat2026) + "</td>" +
-      '<td class="col-num">' + pat2022Cell + "</td>" +
-      '<td class="col-num">' + deltaCell(c) + "</td>" +
+      '<div class="cand-nr">Nº ' + escapeHtml(c.nr) + " · " + escapeHtml(c.genero) + "</div>" +
+      '<div class="cand-meta-mobile">' + escapeHtml(c.cargo) + " · " + escapeHtml(c.uf) + " · " + escapeHtml(c.partido) + "</div></td>" +
+      '<td class="col-cargo">' + escapeHtml(c.cargo) + "</td>" +
+      '<td class="col-uf">' + escapeHtml(c.uf) + "</td>" +
+      '<td class="col-partido" title="' + escapeHtml(c.partidoNome) + '">' + escapeHtml(c.partido) + "</td>" +
+      '<td class="col-num col-pat2026" data-label="Patrimônio 2026" title="' + brl2.format(c.pat2026) + '">' + brl0.format(c.pat2026) + "</td>" +
+      '<td class="col-num col-pat2022" data-label="Patrimônio 2022">' + pat2022Cell + "</td>" +
+      '<td class="col-num col-variacao" data-label="Variação">' + deltaCell(c) + "</td>" +
       "</tr>"
     );
   }
