@@ -165,18 +165,19 @@
       setSort(parts[0], parts[1]);
     });
 
+    // Claro é sempre o padrão ao abrir; o escuro só entra se a pessoa
+    // escolher pelo botão, e essa escolha fica salva pra próxima visita.
     var themeBtn = $("themeToggle");
     var saved = localStorage.getItem("theme");
-    if (saved) document.documentElement.setAttribute("data-theme", saved);
+    if (saved === "dark") document.documentElement.setAttribute("data-theme", "dark");
     themeBtn.addEventListener("click", function () {
-      var cur = document.documentElement.getAttribute("data-theme");
-      var next = cur === "dark" ? "light" : (cur === "light" ? null : "dark");
-      if (next) {
-        document.documentElement.setAttribute("data-theme", next);
-        localStorage.setItem("theme", next);
-      } else {
+      var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (isDark) {
         document.documentElement.removeAttribute("data-theme");
         localStorage.removeItem("theme");
+      } else {
+        document.documentElement.setAttribute("data-theme", "dark");
+        localStorage.setItem("theme", "dark");
       }
     });
   }

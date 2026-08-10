@@ -18,27 +18,8 @@
   --warn-border: #eda100;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:where(:not([data-theme="light"])) {
-    color-scheme: dark;
-    --page:        #0d0d0d;
-    --surface:     #1a1a19;
-    --surface-2:   #232322;
-    --text-primary:   #ffffff;
-    --text-secondary: #c3c2b7;
-    --text-muted:     #898781;
-    --grid:        #2c2c2a;
-    --border:      rgba(255,255,255,0.10);
-    --accent:      #3987e5;
-    --accent-ink:  #ffffff;
-    --good:        #0ca30c;
-    --bad:         #e66767;
-    --good-bg:     rgba(12,163,12,0.14);
-    --bad-bg:      rgba(230,103,103,0.14);
-    --warn-bg:     #2a2410;
-    --warn-border: #c98500;
-  }
-}
+/* Claro é o padrão sempre ao abrir, mesmo se o sistema estiver em modo
+   escuro — o escuro só entra se a pessoa escolher pelo botão 🌓. */
 :root[data-theme="dark"] {
   color-scheme: dark;
   --page:        #0d0d0d;
