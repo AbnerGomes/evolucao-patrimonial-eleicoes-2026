@@ -277,7 +277,7 @@ td.col-num { text-align: right; }
 /* ---------- Cards no mobile (em vez de tabela com scroll lateral) ---------- */
 @media (max-width: 700px) {
   .filters { flex-direction: column; align-items: stretch; }
-  .filters .input, .filters .btn-ghost { width: 100%; }
+  .filters .input, .filters .btn-ghost { width: 100%; flex: 0 0 auto; }
 
   .table-scroll { overflow-x: visible; }
   table { min-width: 0; }
