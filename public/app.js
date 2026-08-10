@@ -210,15 +210,15 @@
     var key = state.sortKey;
     var dir = state.sortDir === "asc" ? 1 : -1;
 
-    if (key === "variacao" && dir === 1) {
-      // Ascendente: candidatos com comparação real (concorreram em 2022) vão
-      // primeiro, das maiores quedas até os maiores aumentos ("verdinho").
-      // Quem é 1ª candidatura não tem variação real, então fica sempre
-      // depois — nunca intercalado no meio dos que caíram/subiram.
+    if (key === "variacao") {
+      // Quem é 1ª candidatura não tem uma variação real (não concorreu em
+      // 2022), então nunca deve aparecer misturado com quem de fato caiu ou
+      // subiu — nem antes, nem no meio. Eles sempre ficam depois do grupo
+      // com variação real, nos dois sentidos de ordenação.
       var real = state.filtered.filter(function (c) { return c.concorreu2022; });
       var novo = state.filtered.filter(function (c) { return !c.concorreu2022; });
-      real.sort(function (a, b) { return (a.pat2026 - a.pat2022) - (b.pat2026 - b.pat2022); });
-      novo.sort(function (a, b) { return a.pat2026 - b.pat2026; });
+      real.sort(function (a, b) { return ((a.pat2026 - a.pat2022) - (b.pat2026 - b.pat2022)) * dir; });
+      novo.sort(function (a, b) { return (a.pat2026 - b.pat2026) * dir; });
       state.filtered = real.concat(novo);
     } else {
       state.filtered.sort(function (a, b) {
