@@ -243,6 +243,20 @@
       real.sort(function (a, b) { return ((a.pat2026 - a.pat2022) - (b.pat2026 - b.pat2022)) * dir; });
       novo.sort(function (a, b) { return (a.pat2026 - b.pat2026) * dir; });
       state.filtered = real.concat(novo);
+    } else if (key === "variacaoPct") {
+      // Variação em %: só faz sentido pra quem concorreu em 2022 com
+      // patrimônio declarado maior que zero (senão a divisão não existe).
+      // Todo o resto (1ª candidatura, ou quem tinha R$ 0 em 2022) não tem
+      // percentual pra mostrar, então fica sempre depois.
+      var comPct = state.filtered.filter(function (c) { return c.concorreu2022 && c.pat2022 > 0; });
+      var semPct = state.filtered.filter(function (c) { return !(c.concorreu2022 && c.pat2022 > 0); });
+      comPct.sort(function (a, b) {
+        var pa = (a.pat2026 - a.pat2022) / a.pat2022;
+        var pb = (b.pat2026 - b.pat2022) / b.pat2022;
+        return (pa - pb) * dir;
+      });
+      semPct.sort(function (a, b) { return (a.pat2026 - b.pat2026) * dir; });
+      state.filtered = comPct.concat(semPct);
     } else {
       state.filtered.sort(function (a, b) {
         var va, vb;
