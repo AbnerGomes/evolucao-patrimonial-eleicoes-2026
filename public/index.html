@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eleições 2026 — Patrimônio dos Candidatos</title>
+<meta name="description" content="Todos os candidatos às Eleições Gerais 2026, com o patrimônio declarado comparado ao de 2022. Dados abertos do TSE.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗳️</text></svg>">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <div class="brand">
+      <span class="brand-emoji" aria-hidden="true">🗳️</span>
+      <div>
+        <h1>Eleições 2026 — Patrimônio dos Candidatos</h1>
+        <p class="subtitle">Todos os candidatos registrados no TSE, com o patrimônio declarado em 2026 comparado ao de 2022</p>
+      </div>
+    </div>
+    <div class="theme-toggle-wrap">
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Alternar tema claro/escuro" title="Alternar tema">🌓</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div id="banner" class="banner" hidden>
+    <span class="banner-icon">ℹ️</span>
+    <span id="bannerText"></span>
+  </div>
+
+  <section class="stats" id="stats" aria-label="Resumo dos dados">
+    <div class="stat-tile">
+      <span class="stat-label">Candidatos exibidos</span>
+      <span class="stat-value" id="statShown">—</span>
+      <span class="stat-sub" id="statTotal"></span>
+    </div>
+    <div class="stat-tile">
+      <span class="stat-label">Patrimônio total declarado (2026)</span>
+      <span class="stat-value" id="statPatTotal">—</span>
+    </div>
+    <div class="stat-tile">
+      <span class="stat-label">Com bens declarados</span>
+      <span class="stat-value" id="statComBens">—</span>
+    </div>
+    <div class="stat-tile">
+      <span class="stat-label">Também concorreram em 2022</span>
+      <span class="stat-value" id="statConcorreram2022">—</span>
+    </div>
+  </section>
+
+  <section class="filters" aria-label="Filtros de busca">
+    <input type="search" id="fSearch" class="input input-search" placeholder="Buscar por nome, apelido na urna ou partido…" autocomplete="off">
+    <select id="fCargo" class="input"><option value="">Todos os cargos</option></select>
+    <select id="fUf" class="input"><option value="">Todos os estados</option></select>
+    <select id="fPartido" class="input"><option value="">Todos os partidos</option></select>
+    <select id="fVariacao" class="input">
+      <option value="">Qualquer variação patrimonial</option>
+      <option value="aumento">Só quem aumentou o patrimônio</option>
+      <option value="queda">Só quem reduziu o patrimônio</option>
+      <option value="novo">Só quem não concorreu em 2022</option>
+    </select>
+    <button id="fReset" class="btn-ghost" type="button">Limpar filtros</button>
+  </section>
+
+  <section class="table-section" aria-label="Lista de candidatos">
+    <div class="table-scroll">
+      <table id="tbl">
+        <thead>
+          <tr>
+            <th class="col-rank">#</th>
+            <th class="col-cand" data-sort="urna">Candidato<span class="sort-arrow"></span></th>
+            <th data-sort="cargo">Cargo<span class="sort-arrow"></span></th>
+            <th data-sort="uf">UF<span class="sort-arrow"></span></th>
+            <th data-sort="partido">Partido<span class="sort-arrow"></span></th>
+            <th class="col-num" data-sort="pat2026">Patrimônio 2026<span class="sort-arrow"></span></th>
+            <th class="col-num" data-sort="pat2022">Patrimônio 2022<span class="sort-arrow"></span></th>
+            <th class="col-num" data-sort="variacao">Variação<span class="sort-arrow"></span></th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          <tr><td colspan="8" class="loading-row">Carregando dados do TSE…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination">
+      <button id="pPrev" class="btn-ghost" type="button">← Anterior</button>
+      <span id="pInfo" class="p-info"></span>
+      <button id="pNext" class="btn-ghost" type="button">Próxima →</button>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>
+      Fonte dos dados: <a href="https://dadosabertos.tse.jus.br/" target="_blank" rel="noopener">Portal de Dados Abertos do TSE</a>
+      — arquivos <code>consulta_cand</code> e <code>bem_candidato</code> de 2026 e 2022.
+      Dados gerados em <span id="footGeradoEm">—</span>.
+    </p>
+    <p>
+      O patrimônio de 2022 é somado por CPF do candidato. Quando o valor aparece como
+      <strong>R$ 0,00 (1ª candidatura)</strong>, significa que a pessoa não concorreu em 2022 —
+      não que o patrimônio declarado tenha sido zero.
+    </p>
+  </footer>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
