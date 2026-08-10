@@ -8,7 +8,7 @@
     all: [],
     meta: null,
     filtered: [],
-    sortKey: "pat2026",
+    sortKey: "variacao",
     sortDir: "desc",
     page: 1,
     filters: { search: "", cargo: "", uf: "", partido: "", variacao: "" },
