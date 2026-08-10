@@ -250,6 +250,23 @@ td.col-num { text-align: right; }
   font-size: 11.5px;
 }
 
+/* ---------- Contador de acessos ---------- */
+.visit-counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 4px 0 40px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 12.5px;
+}
+.visit-counter strong {
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
 @media (max-width: 760px) {
   .stats { grid-template-columns: repeat(2, 1fr); }
   .topbar-inner { flex-direction: column; align-items: flex-start; }

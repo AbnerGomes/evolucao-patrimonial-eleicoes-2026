@@ -4,6 +4,14 @@
   var PAGE_SIZE = 50;
   var DEADLINE_ISO = "2026-08-15"; // fim do prazo de registro de candidaturas (19h)
 
+  // Contador de acessos (serviço gratuito, sem conta — abacus.jasoncameron.dev,
+  // sucessor do countapi.xyz). Conta 1 acesso por sessão de aba e depois só
+  // atualiza o número (sem incrementar de novo) a cada poll.
+  var VISIT_API = "https://abacus.jasoncameron.dev";
+  var VISIT_NAMESPACE = "eleicoes2026-abnergomes-tse";
+  var VISIT_KEY = "acessos";
+  var VISIT_POLL_MS = 2 * 60 * 1000; // 2 minutos
+
   var state = {
     all: [],
     meta: null,
@@ -373,5 +381,41 @@
     els.pNext.disabled = state.page >= maxPage;
   }
 
+  function initVisitCounter() {
+    var wrap = $("visitCounter");
+    var countEl = $("visitCount");
+    var labelEl = $("visitLabel");
+    if (!wrap || !countEl) return;
+
+    function show(value) {
+      if (typeof value !== "number") return;
+      countEl.textContent = value.toLocaleString("pt-BR");
+      if (labelEl) labelEl.textContent = value === 1 ? "acesso ao site" : "acessos ao site";
+      wrap.hidden = false;
+    }
+
+    function refresh() {
+      fetch(VISIT_API + "/get/" + VISIT_NAMESPACE + "/" + VISIT_KEY)
+        .then(function (r) { return r.json(); })
+        .then(function (data) { show(data.value); })
+        .catch(function () { /* serviço fora do ar: mantém o número que já tinha */ });
+    }
+
+    // Só soma 1 acesso por sessão de aba (evita inflar o número com F5);
+    // no resto do tempo o poll só busca o valor atual, sem incrementar.
+    var already = sessionStorage.getItem("visitCounted");
+    var action = already ? "get" : "hit";
+    fetch(VISIT_API + "/" + action + "/" + VISIT_NAMESPACE + "/" + VISIT_KEY)
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        sessionStorage.setItem("visitCounted", "1");
+        show(data.value);
+      })
+      .catch(function () { /* serviço fora do ar: não mostra o contador */ });
+
+    setInterval(refresh, VISIT_POLL_MS);
+  }
+
   loadData();
+  initVisitCounter();
 })();
