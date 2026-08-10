@@ -149,7 +149,13 @@
       th.addEventListener("click", function () {
         var key = th.getAttribute("data-sort");
         var dir;
-        if (state.sortKey === key) {
+        // A coluna Variação cobre dois tipos (R$ e %, escolhidos no seletor
+        // "Ordenar por"). Clicar no cabeçalho só deve inverter o sentido do
+        // tipo que já está ativo — nunca trocar de volta pra R$.
+        if (key === "variacao" && (state.sortKey === "variacao" || state.sortKey === "variacaoPct")) {
+          key = state.sortKey;
+          dir = state.sortDir === "asc" ? "desc" : "asc";
+        } else if (state.sortKey === key) {
           dir = state.sortDir === "asc" ? "desc" : "asc";
         } else {
           dir = key === "urna" || key === "cargo" || key === "uf" || key === "partido" ? "asc" : "desc";
@@ -275,11 +281,9 @@
     }
     document.querySelectorAll("th[data-sort]").forEach(function (th) {
       var arrow = th.querySelector(".sort-arrow");
-      if (th.getAttribute("data-sort") === key) {
-        arrow.textContent = dir === 1 ? "▲" : "▼";
-      } else {
-        arrow.textContent = "";
-      }
+      var thKey = th.getAttribute("data-sort");
+      var active = thKey === key || (thKey === "variacao" && key === "variacaoPct");
+      arrow.textContent = active ? (dir === 1 ? "▲" : "▼") : "";
     });
   }
 
