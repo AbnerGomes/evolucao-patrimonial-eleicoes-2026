@@ -89,6 +89,17 @@ Se preferir não depender de acesso à internet no build do Render, é só **nã
 definir o Build Command — o `public/data.json` já commitado no repositório
 será servido do jeito que estiver (gerado localmente antes do push).
 
+## Contador de acessos
+
+O rodapé do site mostra um contador de acessos ao vivo, usando o serviço
+gratuito [abacus.jasoncameron.dev](https://abacus.jasoncameron.dev/) (sem
+conta, sem custo). Como é um serviço de terceiro sem garantia de permanência,
+existe uma salvaguarda: todo dia às 06h UTC o workflow
+`.github/workflows/snapshot-visits.yml` roda `scripts/snapshot_visits.py`,
+que lê a contagem atual e acrescenta um registro em `visit_history.json`,
+commitado no repositório. Se o serviço gratuito algum dia sair do ar, o
+histórico até aquele ponto continua salvo aqui, no seu próprio repositório.
+
 ## Limitações e observações sobre os dados
 
 - **Autodeclarado:** o patrimônio vem da autodeclaração de bens do candidato
