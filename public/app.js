@@ -325,14 +325,14 @@
     } else {
       pctTxt = "novo patrimônio";
     }
-    return '<span class="' + cls + '">' + arrow + " " + brl0.format(Math.abs(diff)) +
+    return '<span class="' + cls + '">' + arrow + " " + brl2.format(Math.abs(diff)) +
       '<span class="delta-sub">' + pctTxt + "</span></span>";
   }
 
   function rowHtml(c, rank) {
     var pat2022Cell = c.concorreu2022
-      ? '<span title="' + brl2.format(c.pat2022) + '">' + brl0.format(c.pat2022) + "</span>"
-      : '<span title="Não concorreu em 2022">' + brl0.format(0) + '</span><span class="badge">1ª candidatura</span>';
+      ? "<span>" + brl2.format(c.pat2022) + "</span>"
+      : '<span title="Não concorreu em 2022">' + brl2.format(0) + '</span><span class="badge">1ª candidatura</span>';
 
     return (
       "<tr>" +
@@ -344,7 +344,7 @@
       '<td class="col-cargo">' + escapeHtml(c.cargo) + "</td>" +
       '<td class="col-uf">' + escapeHtml(c.uf) + "</td>" +
       '<td class="col-partido" title="' + escapeHtml(c.partidoNome) + '">' + escapeHtml(c.partido) + "</td>" +
-      '<td class="col-num col-pat2026" data-label="Patrimônio 2026" title="' + brl2.format(c.pat2026) + '">' + brl0.format(c.pat2026) + "</td>" +
+      '<td class="col-num col-pat2026" data-label="Patrimônio 2026">' + brl2.format(c.pat2026) + "</td>" +
       '<td class="col-num col-pat2022" data-label="Patrimônio 2022">' + pat2022Cell + "</td>" +
       '<td class="col-num col-variacao" data-label="Variação">' + deltaCell(c) + "</td>" +
       "</tr>"
