@@ -114,14 +114,18 @@
   }
 
   function renderBanner() {
-    var today = new Date();
-    var deadline = new Date(DEADLINE_ISO + "T19:00:00-03:00");
-    if (today <= deadline) {
-      var diffDays = Math.ceil((deadline - today) / 86400000);
+    // Compara só o dia do calendário (ignora hora), pra não ficar preso
+    // no mesmo número o dia inteiro até bater um horário específico.
+    var now = new Date();
+    var todayOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var deadlineParts = DEADLINE_ISO.split("-").map(Number);
+    var deadlineOnly = new Date(deadlineParts[0], deadlineParts[1] - 1, deadlineParts[2]);
+    if (todayOnly < deadlineOnly) {
+      var diffDays = Math.round((deadlineOnly - todayOnly) / 86400000);
       els.bannerText.textContent =
-        "O prazo para registro de candidaturas do TSE vai até 15/08/2026 (faltam " +
-        diffDays +
-        " dia" + (diffDays === 1 ? "" : "s") + "). A lista abaixo é atualizada conforme o TSE publica novos registros — " +
+        "O prazo para registro de candidaturas do TSE vai até 15/08/2026 (" +
+        (diffDays === 1 ? "falta 1 dia" : "faltam " + diffDays + " dias") +
+        "). A lista abaixo é atualizada conforme o TSE publica novos registros — " +
         "ainda não é a lista final de candidatos de 2026.";
       els.banner.hidden = false;
     }
