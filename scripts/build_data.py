@@ -23,6 +23,7 @@ import csv
 import io
 import json
 import sys
+import urllib.error
 import urllib.request
 import zipfile
 from pathlib import Path
@@ -202,4 +203,19 @@ def build(refresh: bool):
 
 if __name__ == "__main__":
     refresh = "--refresh" in sys.argv
-    build(refresh)
+    try:
+        build(refresh)
+    except (urllib.error.URLError, urllib.error.HTTPError) as err:
+        # O TSE às vezes bloqueia downloads automatizados (403/instabilidade
+        # no CDN). Se já existe um data.json gerado antes (committado no
+        # repo), não derruba o deploy inteiro por causa disso — só avisa e
+        # mantém os dados existentes até a próxima tentativa dar certo.
+        if OUT_PATH.exists():
+            print(
+                f"AVISO: falha ao baixar dados do TSE ({err}). "
+                f"Mantendo {OUT_PATH} já existente sem atualizar.",
+                file=sys.stderr,
+            )
+            sys.exit(0)
+        print(f"ERRO: falha ao baixar dados do TSE ({err}) e não há {OUT_PATH} existente.", file=sys.stderr)
+        sys.exit(1)
