@@ -99,6 +99,7 @@ html, body {
   gap: 10px;
   align-items: flex-start;
 }
+.banner[hidden] { display: none; }
 .banner-icon { flex: none; }
 
 /* ---------- Stat tiles ---------- */
